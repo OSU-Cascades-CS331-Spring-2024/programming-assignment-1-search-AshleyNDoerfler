@@ -9,5 +9,10 @@
 # limited search, uniform cost search, and A*#
 ##############################################
 
-def main():
+# What is the main function?:
+#   - Type of search passed in as parameter (bfs default)
+#   - Other parameters: start city (-A), end city (-B), and
+#                       source file
+#   - 
+def main(args):
     pass
