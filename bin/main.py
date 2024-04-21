@@ -15,16 +15,14 @@
 #                       source file
 
 import argparse
-import parse_file
-import mapping
-import cities
-import actions
-
-
+from parse_file import Parse_File
 
 def main():
     parser = setup_parser()
     args = parse_arguments(parser)
+
+    parse_the_file = Parse_File(args.input)
+
 
 
 
