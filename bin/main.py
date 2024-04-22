@@ -18,14 +18,18 @@
 import argparse
 import sys
 from parse_file import Parse_File
+from mapping import Mapping
 
 def main():
     parser = setup_parser()
     args = parse_arguments(parser)
 
     parse_the_file = Parse_File(args.input)
+    mapping = Mapping()
 
-    parse_the_file.main()
+    city, lat, lon, connection_cities = parse_the_file.main()
+
+    mapping.add_city(city, lat, lon, connection_cities)
 
 def setup_parser():
     parser = argparse.ArgumentParser()
