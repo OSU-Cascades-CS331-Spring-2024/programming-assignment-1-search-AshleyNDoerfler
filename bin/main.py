@@ -1,5 +1,6 @@
 ##############################################
 #               Ashley Doerfler              #
+#       Collaborator: Bennett Hamilton       #
 #                 04-17-2024                 #
 #              Project 1: Search             #
 #                                            #
@@ -15,6 +16,7 @@
 #                       source file
 
 import argparse
+import sys
 from parse_file import Parse_File
 
 def main():
@@ -23,8 +25,7 @@ def main():
 
     parse_the_file = Parse_File(args.input)
 
-
-
+    parse_the_file.main()
 
 def setup_parser():
     parser = argparse.ArgumentParser()
@@ -40,3 +41,6 @@ def parse_arguments(parser):
     args = parser.parse_args()
     # Place any messages you may want
     return args
+
+if __name__ == "__main__":
+    sys.exit(main())
