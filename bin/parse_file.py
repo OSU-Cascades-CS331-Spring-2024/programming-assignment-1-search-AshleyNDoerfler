@@ -29,7 +29,7 @@ class Parse_File:
 
             print(connection_cities) # For testing purposes: Remove later
 
-            return city, lat, lon, connection_cities
+        return city, lat, lon, connection_cities
 
 
             
