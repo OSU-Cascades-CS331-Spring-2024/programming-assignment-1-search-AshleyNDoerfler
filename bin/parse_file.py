@@ -34,7 +34,7 @@ class Parse_File:
 
             city = City(city_name, lat, lon)
 
-            self.mapping.add_cities(city, connection_cities)
+            self.mapping.add_city(city, connection_cities)
 
         return self.mapping
 
