@@ -9,7 +9,6 @@ class Parse_File:
         self.mapping = Mapping()
 
     def main(self):
-        print('Parsing file...') # For testing purposes: Remove later
 
         for line in open(self.file_path, 'r'):
             # ex. line: nice 43 43 12 N 7 15 59 E --> va-marseille 197
@@ -25,9 +24,8 @@ class Parse_File:
             connection_cities = []
 
             for i in range(10, len(line) - 1, 2):
-                # TODO: remove va- from city name
+                # Remove va- from city name
                 line[i] = re.sub(r'va-', '', line[i])
-                print("connections", line[i]) # For testing purposes: Remove later
 
                 # Remove end of line character from last city connection
                 line[i + 1] = line[i + 1].replace('\n', '')
@@ -36,13 +34,7 @@ class Parse_File:
 
             city = City(city_name, lat, lon)
 
-            # For testing purposes: Remove later
-            print(city_name)
-            print(connection_cities)
-
             self.mapping.add_cities(city, connection_cities)
-
-        print('File parsed.') # For testing purposes: Remove later
 
         return self.mapping
 
