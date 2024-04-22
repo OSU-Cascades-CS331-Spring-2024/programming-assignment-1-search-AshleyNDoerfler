@@ -2,18 +2,21 @@ class Mapping:
     
     def __init__(self):
         self.city_map = {}
-        self.lat_pos = 0
-        self.lon_pos = 1
-        self.connections_pos = 2
 
-    def add_city(self, city, lat, lon, connections):
-        self.city_map[city] = (lat, lon, connections)
+    def add_cities(self, city, connections):
+        self.city_map[city] = connections
+    
+    def get_citys_connections(self, city_name):
+        # TODO: return city's connections
+        for city_obj in self.city_map:
+            if city_obj.get_name() == city_name:
+                return self.city_map[city_obj]
+        else:
+            return 
+        
+    def get_citys_edges(self, city):
+        return
+    
 
-    def get_citys_lat(self, city):
-        return self.city_map[city][self.lat_pos]
-    
-    def get_citys_lon(self, city):
-        return self.city_map[city][self.lon_pos]
-    
-    def get_citys_connections(self, city):
-        return self.city_map[city][self.connections_pos]
+    def __str__(self):
+        return str(self.city_map)

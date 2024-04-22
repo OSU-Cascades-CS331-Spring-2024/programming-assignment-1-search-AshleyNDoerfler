@@ -25,11 +25,15 @@ def main():
     args = parse_arguments(parser)
 
     parse_the_file = Parse_File(args.input)
+
     mapping = Mapping()
+    mapping = parse_the_file.main()
 
-    city, lat, lon, connection_cities = parse_the_file.main()
+    print(mapping.__str__())
 
-    mapping.add_city(city, lat, lon, connection_cities)
+    print(mapping.get_citys_connections('nancy'))
+
+
 
 def setup_parser():
     parser = argparse.ArgumentParser()
