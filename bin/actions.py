@@ -48,10 +48,12 @@ class Actions:
             return result
 
     def iterative_deepening_search(self, mapping, start, end):
-        for depth in range(0, 1e-100):
+        depth = 0
+        while True:
             result = self.dls(mapping, start, end, depth)
             if result != "cutoff":
                 return result
+            depth += 1
 
     def ucs(self, mapping, start, end):
         explored = []
