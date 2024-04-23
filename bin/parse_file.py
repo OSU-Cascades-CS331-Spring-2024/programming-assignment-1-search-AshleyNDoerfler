@@ -21,7 +21,7 @@ class Parse_File:
             lat = line[1] + ' ' + line[2] + ' ' + line[3] + ' ' + line[4]
             lon = line[5] + ' ' + line[6] + ' ' + line[7] + ' ' + line[8]
 
-            connection_cities = []
+            connection_cities = {}
 
             for i in range(10, len(line) - 1, 2):
                 # Remove va- from city name
@@ -30,9 +30,12 @@ class Parse_File:
                 # Remove end of line character from last city connection
                 line[i + 1] = line[i + 1].replace('\n', '')
                 
-                connection_cities.append(line[i] + ' ' + line[i + 1])
+                connection_cities[line[i]] = line[i + 1]
 
             city = City(city_name, lat, lon)
+
+            #order connection_cities by cost
+            connection_cities = dict(sorted(connection_cities.items(), key=lambda item: item[1]))
 
             self.mapping.add_city(city, connection_cities)
 

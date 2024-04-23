@@ -12,6 +12,13 @@ class Mapping:
                 return self.city_map[city_obj]
         else:
             return 
+        
+    def get_city(self, city_name):
+        for city_obj in self.city_map:
+            if city_obj.get_name() == city_name:
+                return city_obj
+        else:
+            return
 
     def __str__(self):
         return str(self.city_map)
