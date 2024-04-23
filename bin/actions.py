@@ -6,6 +6,18 @@ class Actions:
     def __init__(self, search_type = 'bfs'):
         self.search_type = search_type
 
+    def search(self, mapping, start, end):
+        if self.search_type == 'bfs':
+            return self.bfs(mapping, start, end)
+        elif self.search_type == 'dls':
+            return self.iterative_deepening_search(mapping, start, end)
+        elif self.search_type == 'ucs':
+            return self.ucs(mapping, start, end)
+        elif self.search_type == 'astar':
+            return self.astar(mapping, start, end)
+        else:
+            return "Invalid search type"
+
     ############################
     #    Searching Algorithms  #
     ############################
@@ -15,7 +27,7 @@ class Actions:
         frontier = [start]
         connections = mapping.get_citys_connections(start)
         reached.append(start)
-
+        node = start
         # Base case
         if node == end:
             return node
