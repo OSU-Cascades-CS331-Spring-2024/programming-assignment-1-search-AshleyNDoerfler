@@ -52,26 +52,25 @@ class Actions:
 
     def ucs(self, mapping, start, end):
         explored = []
-        frontier = start
+        frontier = [start]
         connections = mapping.get_citys_connections(start)
         node = start
-        path = node
+        path = {start: start}
+        cost = {start: 0}
 
-        while True:
-            if(frontier.empty()):
-                return "failure"
+        while frontier:
             node = frontier.pop(0)
             if(node == end):
-                return path
+                return path[node]
             explored.append(node)
-            for city in connections:
-                child = city
-                if child not in explored:
+            for city, city_cost in connections.items():
+                new_cost = cost[node] + city_cost
+                if city not in cost or new_cost < cost[city]:
+                    cost[city] = new_cost
                     frontier.append(city)
-                elif child in frontier:
-                    if path < child:
-                        path = child
+                    path[city] = path[node] + [city]
 
+        return "failure"
 
     def astar(self, mapping, start, end):
         pass
