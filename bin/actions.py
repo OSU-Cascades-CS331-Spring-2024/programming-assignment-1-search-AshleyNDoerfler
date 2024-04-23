@@ -51,21 +51,27 @@ class Actions:
                 return result
 
     def ucs(self, mapping, start, end):
-        # explored = []
-        # cost = 0
-        # connections = mapping.get_citys_connections(start)
-        # node = start
+        explored = []
+        frontier = start
+        connections = mapping.get_citys_connections(start)
+        node = start
+        path = node
 
-        # while True:
-        #     if(connections.empty()):
-        #         return None
-        #     if(node == end):
-        #         return #solution
-        #     explored.append(node)
-        #     for city in mapping.get_citys_connections(node):
-        #         if city not in explored:
-        #             connections.append(city)
-        pass
+        while True:
+            if(frontier.empty()):
+                return "failure"
+            node = frontier.pop(0)
+            if(node == end):
+                return path
+            explored.append(node)
+            for city in connections:
+                child = city
+                if child not in explored:
+                    frontier.append(city)
+                elif child in frontier:
+                    if path < child:
+                        path = child
+
 
     def astar(self, mapping, start, end):
         pass
