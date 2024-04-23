@@ -12,19 +12,21 @@ class Actions:
     
     def bfs(self, mapping, start, end):
         reached = []
+        frontier = [start]
         connections = mapping.get_citys_connections(start)
-        node = start
+        reached.append(start)
+
         # Base case
         if node == end:
             return node
-        frontier = start
-        reached.append(node)
 
-        while(frontier.empty() == False):
+        while(frontier):
             node = frontier.pop(0)
 
+            if node == end:
+                return reached
+
             for child in connections:
-                s = child
                 if child not in reached:
                     reached.append(child)
                     if child == end:
@@ -36,16 +38,19 @@ class Actions:
         frontier = start
         result = "failure"
 
-        while(frontier.empty() == False):
-            node = frontier.pop(0)
-            if node == end:
-                return node
-            if len(depth > mapping.get_citys_connections(node)) :
+        if depth == 0:
+            if start == end:
+                return start
+            else:
                 return "cutoff"
-            elif(cycle_node(node) == False):
-                for child in mapping.get_citys_connections(node):
-                    frontier.append(child)
-            return result
+
+        if depth > 0:
+            for child in mapping.get_citys_connections(start):
+                result = self.dls(mapping, child, end, depth - 1)
+                if (result != "failure"):
+                    return result
+        
+        return "failure"
 
     def iterative_deepening_search(self, mapping, start, end):
         depth = 0
