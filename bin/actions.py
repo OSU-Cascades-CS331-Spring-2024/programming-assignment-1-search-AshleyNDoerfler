@@ -1,3 +1,6 @@
+from mapping import Mapping
+import math
+
 class Actions:
 
     def __init__(self, search_type = 'bfs'):
@@ -73,8 +76,31 @@ class Actions:
         return "failure"
 
     def astar(self, mapping, start, end):
-        pass
+        explored = []
+        frontier = [(start, 0)]
+        path = {start: [start]}
+        cost = {start: 0}
+
+        while frontier:
+            node, node_cost = frontier.pop(0)
+            if node == end:
+                return path[node]
+            explored.append(node)
+            for city, city_cost in mapping.get_citys_connections(node):
+                new_cost = node_cost + city_cost
+                if city not in cost or new_cost < cost[city]:
+                    cost[city] = new_cost
+                    h_cost = self.euclidean_distance(mapping.get_city(node), mapping.get_city(end))
+                    f_cost = new_cost + h_cost
+                    frontier.append((city, f_cost))
+                    path[city] = path[node] + [city]
+        
 
     ############################
     #      Helper Functions    #
     ############################
+
+    def euclidean_distance(self, city_1, city_2):
+        lat1, lon1 = city_1.get_lat(), city_1.get_lon()
+        lat2, lon2 = city_2.get_lat(), city_2.get_lon()
+        return math.sqrt((lat2 - lat1) ** 2 + (lon2 - lon1) ** 2)
