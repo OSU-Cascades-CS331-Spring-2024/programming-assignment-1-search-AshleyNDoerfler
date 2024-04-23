@@ -19,6 +19,7 @@ import argparse
 import sys
 from parse_file import Parse_File
 from mapping import Mapping
+from actions import Actions
 
 def main():
     parser = setup_parser()
@@ -27,11 +28,12 @@ def main():
     parse_the_file = Parse_File(args.input)
 
     mapping = Mapping()
-    mapping = parse_the_file.main()
+    mapping = parse_the_file.main() # Returns mapping object
 
-    print(mapping.__str__())
+    actions = Actions(args.search)
+    path = actions.search(mapping, args.start, args.end)
 
-    print(mapping.get_citys_connections('nancy'))
+    print(path)
 
 
 
