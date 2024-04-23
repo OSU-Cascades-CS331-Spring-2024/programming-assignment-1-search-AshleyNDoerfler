@@ -29,8 +29,26 @@ class Actions:
                     frontier.append(mapping.get_citys_connections(child))
         return None
 
-    def dls(self, mapping, start, end):
-        pass
+    def dls(self, mapping, start, end, depth):
+        frontier = start
+        result = "failure"
+
+        while(frontier.empty() == False):
+            node = frontier.pop(0)
+            if node == end:
+                return node
+            if len(depth > mapping.get_citys_connections(node)) :
+                return "cutoff"
+            elif(cycle_node(node) == False):
+                for child in mapping.get_citys_connections(node):
+                    frontier.append(child)
+            return result
+
+    def iterative_deepening_search(self, mapping, start, end):
+        for depth in range(0, 1e-100):
+            result = self.dls(mapping, start, end, depth)
+            if result != "cutoff":
+                return result
 
     def ucs(self, mapping, start, end):
         # explored = []
