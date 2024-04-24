@@ -8,7 +8,7 @@ class Mapping:
         self.city[city.get_name()] = city
 
     def get_city_object(self, city_name):
-        print("Looky here: ", self.city[city_name].name, " - ", self.city[city_name])
+        # print("Looky here: ", self.city[city_name].name, " - ", self.city[city_name])
         return self.city[city_name]
 
     def add_connection(self, city, connections):

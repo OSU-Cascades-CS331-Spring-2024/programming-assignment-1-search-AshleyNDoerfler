@@ -35,7 +35,7 @@ def main():
     actions = Actions(mapping, args.start, args.end, args.search)
     path = actions.search()
 
-    # print(path)
+    print(path)
 
     # with open('solutions.txt', 'a') as f:
     #     f.write(path)

@@ -30,11 +30,9 @@ class Actions:
         frontier = [self.start]
         reached.append(self.start)
 
-        node = self.mapping.get_city_object(self.start)
+        # node = self.mapping.get_city_object(self.start)
 
-        # Base case
-        if node == self.end:
-            return node
+        
         
         # print(self.mapping.city_map)
 
@@ -42,6 +40,10 @@ class Actions:
             node = self.mapping.get_city_object(frontier.pop(0))
             # node = self.get_next_city(mapping, node)
 
+            # Base case
+            if node == self.end:
+                return node
+        
             print("Node: ", node)
 
             # connections = self.mapping.get_citys_connections(node)
@@ -49,12 +51,15 @@ class Actions:
             if node == self.end:
                 return reached
 
+            # {city_obj: {city_connection: cost}}, so given the node object, get the connection key value pairs
             for child in self.mapping.city_map[node]:
+                print("Child: ", child)
+                print("Reached: ", reached)
                 if child not in reached:
                     reached.append(child)
                     if child == self.end:
                         return reached
-                    frontier.append(self.mapping.get_citys_connections(child))
+                    frontier.append(list(self.mapping.get_citys_connections(child).keys())[0])
         return None
 
     def dls(self, depth):
