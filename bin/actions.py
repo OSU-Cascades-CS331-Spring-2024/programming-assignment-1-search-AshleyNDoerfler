@@ -58,29 +58,30 @@ class Actions:
 
     def dls(self, depth):
         frontier = [self.start]
-        result = "Failure"
+        path = []
         count = 0
+        visited = []
 
         while frontier:
             node = self.mapping.get_city_object(frontier.pop(0))
+            visited.append(node.name)
 
+            print("Depth: ", depth, "Node: ", node.name, ", Frontier: ", frontier)
+
+            path.append(node.name)
             count += 1
 
             # Success
             if node.name == self.end:
-                print("Success! Node: ", node)
-                return node
-            
-            if depth > count:
-                connections = self.mapping.get_citys_connections(node)
-                for child in self.mapping.city_map[node]:
-                    frontier.append(list(self.mapping.get_citys_connections(node.name).keys())[0])
-                    print("Frontier: ", frontier)
-            else:
-                print("Cutoff! Node: ", node)
-                result = "cutoff"
-        return result
+                return path
 
+            if depth > count:
+                for child_name, _ in self.mapping.get_citys_connections(node.name).items():
+                    if child_name not in visited:
+                        frontier.append(child_name)
+                    # print("Node: ", node.name, ",Frontier: ", frontier)
+
+        return "cutoff"
 
     def iterative_deepening_search(self):
         for depth in range(0, 100):
