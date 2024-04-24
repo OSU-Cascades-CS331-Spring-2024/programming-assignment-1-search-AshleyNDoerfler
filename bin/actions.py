@@ -1,5 +1,6 @@
 from mapping import Mapping
 import math
+import heapq
 
 class Actions:
 
@@ -91,24 +92,26 @@ class Actions:
                 return result
 
     def ucs(self):
-        explored = []
-        frontier = [self.start]
-        connections = self.mapping.get_citys_connections(self.start)
-        node = self.start
-        path = {self.start: self.start}
+        explored = set()
+        frontier = [(0, self.start)]
+        path = {self.start: [self.start]}
         cost = {self.start: 0}
 
         while frontier:
-            node = self.mapping.get_city_object(frontier.pop(0))
-            if(node == self.end):
+            current_cost, node = heapq.heappop(frontier)
+
+            if node == self.end:
                 return path[node]
-            explored.append(node)
-            for city, city_cost in connections.items():
-                new_cost = cost[node] + city_cost
-                if city not in cost or new_cost < cost[city]:
-                    cost[city] = new_cost
-                    frontier.append(city)
-                    path[city] = path[node] + [city]
+
+            explored.add(node)
+
+            for child, child_cost in self.mapping.get_citys_connections(node).items():
+                total_cost = current_cost + int(child_cost)
+
+                if child not in cost or total_cost < cost[child]:
+                    cost[child] = total_cost
+                    path[child] = path[node] + [child]
+                    heapq.heappush(frontier, (total_cost, child))
 
         return "failure"
 

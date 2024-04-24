@@ -28,6 +28,10 @@ class Mapping:
         else:
             return
         
+    def get_cost(self, city_1, city_2):
+        city_1 = self.get_city(city_1)
+        return self.city_map[city_1][city_2]
+        
     # def set_cities_as_objects(self):
     #     new_connections = []
 
