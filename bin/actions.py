@@ -47,7 +47,6 @@ class Actions:
         return None
 
     def dls(self, mapping, start, end, depth):
-        frontier = start
         result = "failure"
 
         if depth == 0:
@@ -123,3 +122,9 @@ class Actions:
         lat1, lon1 = city_1.get_lat(), city_1.get_lon()
         lat2, lon2 = city_2.get_lat(), city_2.get_lon()
         return math.sqrt((lat2 - lat1) ** 2 + (lon2 - lon1) ** 2)
+    
+    def get_next_city(self, mapping, connection):
+        for city in mapping.city_map:
+            if(city.get_name() == connection):
+                return city
+        return None
