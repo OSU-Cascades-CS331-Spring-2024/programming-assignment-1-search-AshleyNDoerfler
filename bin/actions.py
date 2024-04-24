@@ -31,16 +31,13 @@ class Actions:
         reached.append(self.start)
 
         # node = self.mapping.get_city_object(self.start)
-
-        
-        
         # print(self.mapping.city_map)
 
         while(frontier):
             node = self.mapping.get_city_object(frontier.pop(0))
             # node = self.get_next_city(mapping, node)
         
-            print("Node: ", node)
+            # print("Node: ", node)
 
             # connections = self.mapping.get_citys_connections(node)
 
@@ -49,9 +46,9 @@ class Actions:
 
             # {city_obj: {city_connection: cost}}, so given the node object, get the connection key value pairs
             for child in self.mapping.city_map[node]:
-                print("node: ", node.name, ', Connections ', self.mapping.city_map[node])
-                print("Child: ", child)
-                print("Reached: ", reached)
+                # print("node: ", node.name, ', Connections ', self.mapping.city_map[node])
+                # print("Child: ", child)
+                # print("Reached: ", reached)
                 if child not in reached:
                     reached.append(child)
                     if child == self.end:
@@ -60,29 +57,37 @@ class Actions:
         return None
 
     def dls(self, depth):
-        result = "failure"
+        frontier = [self.start]
+        result = "Failure"
+        count = 0
 
-        if depth == 0:
-            if self.start == self.end:
-                return self.start
+        while frontier:
+            node = self.mapping.get_city_object(frontier.pop(0))
+
+            count += 1
+
+            # Success
+            if node.name == self.end:
+                print("Success! Node: ", node)
+                return node
+            
+            if depth > count:
+                connections = self.mapping.get_citys_connections(node)
+                for child in self.mapping.city_map[node]:
+                    frontier.append(list(self.mapping.get_citys_connections(node.name).keys())[0])
+                    print("Frontier: ", frontier)
             else:
-                return "cutoff"
+                print("Cutoff! Node: ", node)
+                result = "cutoff"
+        return result
 
-        if depth > 0:
-            for child in self.mapping.get_citys_connections(self.start):
-                result = self.dls(self.mapping, child, self.end, depth - 1)
-                if (result != "failure"):
-                    return result
-        
-        return "failure"
 
     def iterative_deepening_search(self):
-        depth = 0
-        while True:
-            result = self.dls(self.mapping, self.start, self.end, depth)
+        for depth in range(0, 100):
+            result = self.dls(depth)
             if result != "cutoff":
+                print("Result: ", result)
                 return result
-            depth += 1
 
     def ucs(self):
         explored = []
@@ -93,7 +98,7 @@ class Actions:
         cost = {self.start: 0}
 
         while frontier:
-            node = frontier.pop(0)
+            node = self.mapping.get_city_object(frontier.pop(0))
             if(node == self.end):
                 return path[node]
             explored.append(node)
