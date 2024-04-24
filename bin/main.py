@@ -30,10 +30,10 @@ def main():
     mapping = Mapping()
     mapping = parse_the_file.main() # Returns mapping object
 
-    mapping.set_cities_as_objects()
+    # mapping.set_cities_as_objects()
 
     actions = Actions(mapping, args.start, args.end, args.search)
-    # path = actions.search(mapping, args.start, args.end)
+    path = actions.search()
 
     # print(path)
 

@@ -29,27 +29,27 @@ class Actions:
         reached = []
         frontier = [self.start]
         reached.append(self.start)
-        node = self.start
+
+        node = self.mapping.get_city_object(self.start)
+
         # Base case
         if node == self.end:
             return node
         
-        # print(mapping.city_map)
+        # print(self.mapping.city_map)
 
         while(frontier):
-            node = frontier.pop(0)
-
-            
+            node = self.mapping.get_city_object(frontier.pop(0))
             # node = self.get_next_city(mapping, node)
 
             print("Node: ", node)
 
-            connections = self.mapping.get_citys_connections(node)
+            # connections = self.mapping.get_citys_connections(node)
 
             if node == self.end:
                 return reached
 
-            for child in connections:
+            for child in self.mapping.city_map[node]:
                 if child not in reached:
                     reached.append(child)
                     if child == self.end:

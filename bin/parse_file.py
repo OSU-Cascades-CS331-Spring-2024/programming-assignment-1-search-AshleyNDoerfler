@@ -37,12 +37,7 @@ class Parse_File:
             #order connection_cities by cost
             connection_cities = dict(sorted(connection_cities.items(), key=lambda item: item[1]))
 
-            self.mapping.add_city(city, connection_cities)
+            self.mapping.add_city(city)
+            self.mapping.add_connection(city, connection_cities)
 
         return self.mapping
-
-            
-
-
-
-
