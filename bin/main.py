@@ -30,15 +30,15 @@ def main():
     mapping = Mapping()
     mapping = parse_the_file.main() # Returns mapping object
 
-    # mapping.set_cities_as_objects()
+    mapping.set_cities_as_objects()
 
-    actions = Actions(args.search)
-    path = actions.search(mapping, args.start, args.end)
+    actions = Actions(mapping, args.start, args.end, args.search)
+    # path = actions.search(mapping, args.start, args.end)
 
-    print(path)
+    # print(path)
 
-    with open('solutions.txt', 'a') as f:
-        f.write(path)
+    # with open('solutions.txt', 'a') as f:
+    #     f.write(path)
 
 
 

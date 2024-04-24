@@ -3,18 +3,21 @@ import math
 
 class Actions:
 
-    def __init__(self, search_type = 'bfs'):
+    def __init__(self, mapping, start, end, search_type = 'bfs'):
         self.search_type = search_type
+        self.mapping = mapping
+        self.start = start
+        self.end = end
 
-    def search(self, mapping, start, end):
+    def search(self):
         if self.search_type == 'bfs':
-            return self.bfs(mapping, start, end)
+            return self.bfs()
         elif self.search_type == 'dls':
-            return self.iterative_deepening_search(mapping, start, end)
+            return self.iterative_deepening_search()
         elif self.search_type == 'ucs':
-            return self.ucs(mapping, start, end)
+            return self.ucs()
         elif self.search_type == 'astar':
-            return self.astar(mapping, start, end)
+            return self.astar()
         else:
             return "Invalid search type"
 
@@ -22,66 +25,74 @@ class Actions:
     #    Searching Algorithms  #
     ############################
     
-    def bfs(self, mapping, start, end):
+    def bfs(self):
         reached = []
-        frontier = [start]
-        connections = mapping.get_citys_connections(start)
-        reached.append(start)
-        node = start
+        frontier = [self.start]
+        reached.append(self.start)
+        node = self.start
         # Base case
-        if node == end:
+        if node == self.end:
             return node
+        
+        # print(mapping.city_map)
 
         while(frontier):
             node = frontier.pop(0)
 
-            if node == end:
+            
+            # node = self.get_next_city(mapping, node)
+
+            print("Node: ", node)
+
+            connections = self.mapping.get_citys_connections(node)
+
+            if node == self.end:
                 return reached
 
             for child in connections:
                 if child not in reached:
                     reached.append(child)
-                    if child == end:
+                    if child == self.end:
                         return reached
-                    frontier.append(mapping.get_citys_connections(child))
+                    frontier.append(self.mapping.get_citys_connections(child))
         return None
 
-    def dls(self, mapping, start, end, depth):
+    def dls(self, depth):
         result = "failure"
 
         if depth == 0:
-            if start == end:
-                return start
+            if self.start == self.end:
+                return self.start
             else:
                 return "cutoff"
 
         if depth > 0:
-            for child in mapping.get_citys_connections(start):
-                result = self.dls(mapping, child, end, depth - 1)
+            for child in self.mapping.get_citys_connections(self.start):
+                result = self.dls(self.mapping, child, self.end, depth - 1)
                 if (result != "failure"):
                     return result
         
         return "failure"
 
-    def iterative_deepening_search(self, mapping, start, end):
+    def iterative_deepening_search(self):
         depth = 0
         while True:
-            result = self.dls(mapping, start, end, depth)
+            result = self.dls(self.mapping, self.start, self.end, depth)
             if result != "cutoff":
                 return result
             depth += 1
 
-    def ucs(self, mapping, start, end):
+    def ucs(self):
         explored = []
-        frontier = [start]
-        connections = mapping.get_citys_connections(start)
-        node = start
-        path = {start: start}
-        cost = {start: 0}
+        frontier = [self.start]
+        connections = self.mapping.get_citys_connections(self.start)
+        node = self.start
+        path = {self.start: self.start}
+        cost = {self.start: 0}
 
         while frontier:
             node = frontier.pop(0)
-            if(node == end):
+            if(node == self.end):
                 return path[node]
             explored.append(node)
             for city, city_cost in connections.items():
@@ -93,22 +104,22 @@ class Actions:
 
         return "failure"
 
-    def astar(self, mapping, start, end):
+    def astar(self):
         explored = []
-        frontier = [(start, 0)]
-        path = {start: [start]}
-        cost = {start: 0}
+        frontier = [(self.start, 0)]
+        path = {self.start: [self.start]}
+        cost = {self.start: 0}
 
         while frontier:
             node, node_cost = frontier.pop(0)
-            if node == end:
+            if node == self.end:
                 return path[node]
             explored.append(node)
-            for city, city_cost in mapping.get_citys_connections(node):
+            for city, city_cost in self.mapping.get_citys_connections(node):
                 new_cost = node_cost + city_cost
                 if city not in cost or new_cost < cost[city]:
                     cost[city] = new_cost
-                    h_cost = self.euclidean_distance(mapping.get_city(node), mapping.get_city(end))
+                    h_cost = self.euclidean_distance(self.mapping.get_city(node), self.mapping.get_city(self.end))
                     f_cost = new_cost + h_cost
                     frontier.append((city, f_cost))
                     path[city] = path[node] + [city]
@@ -123,8 +134,4 @@ class Actions:
         lat2, lon2 = city_2.get_lat(), city_2.get_lon()
         return math.sqrt((lat2 - lat1) ** 2 + (lon2 - lon1) ** 2)
     
-    def get_next_city(self, mapping, connection):
-        for city in mapping.city_map:
-            if(city.get_name() == connection):
-                return city
-        return None
+    
