@@ -143,10 +143,11 @@ class Actions:
                 print("Node: ", node, ", Child: ", child)
                 
                 distance_to_goal = self.euclidean_distance(self.mapping.get_city_object(node), self.mapping.get_city_object(self.end)), len(frontier)
-                heuristic_cost = distance_to_goal  # Replace this with your own heuristic function
+                
+                print("Distance to goal: ", distance_to_goal)
 
                 distance = self.euclidean_distance(node, child)
-                total_cost = current_cost + distance + heuristic_cost  # Total cost includes both actual cost and heuristic
+                total_cost = current_cost + distance + distance_to_goal
 
                 if child not in cost or total_cost < cost[child]:
                     cost[child] = total_cost
