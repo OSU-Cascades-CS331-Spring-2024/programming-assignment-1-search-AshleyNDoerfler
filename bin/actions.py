@@ -116,24 +116,35 @@ class Actions:
         return "failure"
 
     def astar(self):
-        explored = []
-        frontier = [(self.start, 0)]
+        explored = set()
+        frontier = [(0, self.start)]
         path = {self.start: [self.start]}
         cost = {self.start: 0}
 
         while frontier:
-            node, node_cost = frontier.pop(0)
+            current_cost, node = heapq.heappop(frontier)
+
             if node == self.end:
                 return path[node]
-            explored.append(node)
-            for city, city_cost in self.mapping.get_citys_connections(node):
-                new_cost = node_cost + city_cost
-                if city not in cost or new_cost < cost[city]:
-                    cost[city] = new_cost
-                    h_cost = self.euclidean_distance(self.mapping.get_city(node), self.mapping.get_city(self.end))
-                    f_cost = new_cost + h_cost
-                    frontier.append((city, f_cost))
-                    path[city] = path[node] + [city]
+
+            explored.add(node)
+
+            for child, _ in self.mapping.get_citys_connections(node).items():
+                
+                print("Node: ", node, ", Child: ", child)
+                
+                distance_to_goal = self.euclidean_distance(self.mapping.get_city_object(node), self.mapping.get_city_object(self.end))
+                heuristic_cost = distance_to_goal  # Replace this with your own heuristic function
+
+                distance = self.euclidean_distance(node, child)
+                total_cost = current_cost + distance + heuristic_cost  # Total cost includes both actual cost and heuristic
+
+                if child not in cost or total_cost < cost[child]:
+                    cost[child] = total_cost
+                    path[child] = path[node] + [child]
+                    heapq.heappush(frontier, (total_cost, child))
+
+        return "failure"
         
 
     ############################
@@ -141,8 +152,25 @@ class Actions:
     ############################
 
     def euclidean_distance(self, city_1, city_2):
-        lat1, lon1 = city_1.get_lat(), city_1.get_lon()
-        lat2, lon2 = city_2.get_lat(), city_2.get_lon()
-        return math.sqrt((lat2 - lat1) ** 2 + (lon2 - lon1) ** 2)
+        if type(city_1) == str:
+            city_1 = self.mapping.get_city_object(city_1)
+        if type(city_2) == str:
+            city_2 = self.mapping.get_city_object(city_2)
+        
+        # Get lat point one and two
+        lat_coord_1 = city_1.get_lat().split(' ')
+        lat_coord_2 = city_2.get_lat().split(' ')
+        
+        lat_1 = int(lat_coord_1[0])
+        lat_2 = int(lat_coord_2[0])
+        
+        # Get lon point one and two
+        lon_coord_1 = city_1.get_lon().split(' ')
+        lon_coord_2 = city_2.get_lon().split(' ')
+        
+        lon_1 = int(lon_coord_1[1])
+        lon_2 = int(lon_coord_2[1])
+
+        return math.sqrt((lat_2 - lat_1) ** 2 + (lon_2 - lon_1) ** 2)
     
     
