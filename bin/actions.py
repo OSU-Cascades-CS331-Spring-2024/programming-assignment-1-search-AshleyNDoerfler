@@ -10,6 +10,7 @@ class Actions:
         self.start = start
         self.end = end
         self.frontier_count = 0
+        self.maintained = 0
 
     def search(self):
         if self.search_type == 'bfs':
@@ -45,7 +46,8 @@ class Actions:
             # connections = self.mapping.get_citys_connections(node)
 
             if node == self.end:
-                return reached, self.frontier_count
+                self.maintained = len(frontier)
+                return reached, self.frontier_count, len(reached - 1), self.maintained
 
             # {city_obj: {city_connection: cost}}, so given the node object, get the connection key value pairs
             for child in self.mapping.city_map[node]:
@@ -55,7 +57,7 @@ class Actions:
                 if child not in reached:
                     reached.append(child)
                     if child == self.end:
-                        return reached
+                        return reached, self.frontier_count, len(reached - 1), self.maintained
                     frontier.append(list(self.mapping.get_citys_connections(node.name).keys())[0])
         return None
 
@@ -77,7 +79,8 @@ class Actions:
 
             # Success
             if node.name == self.end:
-                return path, self.frontier_count
+                self.maintained = len(frontier)
+                return path, len(frontier)
 
             if depth > count:
                 for child_name, _ in self.mapping.get_citys_connections(node.name).items():
@@ -93,7 +96,7 @@ class Actions:
             result = self.dls(depth)
             if result != "cutoff":
                 print("Result: ", result)
-                return result
+                return result, self.frontier_count, len(result - 1), self.maintained
 
     def ucs(self):
         explored = set()
@@ -106,7 +109,7 @@ class Actions:
             self.frontier_count += 1
 
             if node == self.end:
-                return path[node], self.frontier_count
+                return path[node], self.frontier_count, len(path[node] - 1), len(frontier)
 
             explored.add(node)
 
@@ -131,7 +134,7 @@ class Actions:
             self.frontier_count += 1
 
             if node == self.end:
-                return path[node], self.frontier_count
+                return path[node], self.frontier_count, len(path[node] - 1), self.maintained, len(frontier)
 
             explored.add(node)
 
@@ -139,7 +142,7 @@ class Actions:
                 
                 print("Node: ", node, ", Child: ", child)
                 
-                distance_to_goal = self.euclidean_distance(self.mapping.get_city_object(node), self.mapping.get_city_object(self.end))
+                distance_to_goal = self.euclidean_distance(self.mapping.get_city_object(node), self.mapping.get_city_object(self.end)), len(frontier)
                 heuristic_cost = distance_to_goal  # Replace this with your own heuristic function
 
                 distance = self.euclidean_distance(node, child)
