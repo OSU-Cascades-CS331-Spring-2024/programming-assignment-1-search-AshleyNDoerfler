@@ -47,7 +47,7 @@ class Actions:
 
             if node == self.end:
                 self.maintained = len(frontier)
-                return reached, self.frontier_count, len(reached - 1), self.maintained
+                return reached, self.frontier_count, len(reached) - 1, self.maintained
 
             # {city_obj: {city_connection: cost}}, so given the node object, get the connection key value pairs
             for child in self.mapping.city_map[node]:
@@ -57,7 +57,7 @@ class Actions:
                 if child not in reached:
                     reached.append(child)
                     if child == self.end:
-                        return reached, self.frontier_count, len(reached - 1), self.maintained
+                        return reached, self.frontier_count, len(reached) - 1, self.maintained
                     frontier.append(list(self.mapping.get_citys_connections(node.name).keys())[0])
         return None
 
@@ -96,7 +96,7 @@ class Actions:
             result = self.dls(depth)
             if result != "cutoff":
                 print("Result: ", result)
-                return result, self.frontier_count, len(result - 1), self.maintained
+                return result, self.frontier_count, len(result) - 1, self.maintained
 
     def ucs(self):
         explored = set()
@@ -109,7 +109,7 @@ class Actions:
             self.frontier_count += 1
 
             if node == self.end:
-                return path[node], self.frontier_count, len(path[node] - 1), len(frontier)
+                return path[node], self.frontier_count, len(path[node]) - 1, len(frontier)
 
             explored.add(node)
 
@@ -134,7 +134,7 @@ class Actions:
             self.frontier_count += 1
 
             if node == self.end:
-                return path[node], self.frontier_count, len(path[node] - 1), self.maintained, len(frontier)
+                return path[node], self.frontier_count, len(path[node]) - 1, self.maintained, len(frontier)
 
             explored.add(node)
 

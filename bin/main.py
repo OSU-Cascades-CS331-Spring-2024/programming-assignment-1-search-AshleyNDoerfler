@@ -33,12 +33,22 @@ def main():
     # mapping.set_cities_as_objects()
 
     actions = Actions(mapping, args.start, args.end, args.search)
-    path = actions.search()
+    path, explored, expanded, maintained = actions.search()
+    
+    search = "Search: " + args.search + "\n"
+    path = "Path: " + str(path)
+    explored = "\nNodes explored: " + str(explored)
+    expanded = "\nNodes expanded: " + str(expanded)
+    maintained = "\nNodes maintained: " + str(maintained)
 
     print(path)
 
-    # with open('solutions.txt', 'a') as f:
-    #     f.write(path)
+    with open('solutions.txt', 'a') as f:
+        f.write(search)
+        f.write(path)
+        f.write(explored)
+        f.write(expanded)
+        f.write(maintained)
 
 
 
