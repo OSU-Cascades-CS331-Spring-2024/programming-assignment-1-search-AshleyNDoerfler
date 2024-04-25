@@ -9,6 +9,7 @@ class Actions:
         self.mapping = mapping
         self.start = start
         self.end = end
+        self.frontier_count = 0
 
     def search(self):
         if self.search_type == 'bfs':
@@ -36,6 +37,7 @@ class Actions:
 
         while(frontier):
             node = self.mapping.get_city_object(frontier.pop(0))
+            self.frontier_count += 1
             # node = self.get_next_city(mapping, node)
         
             # print("Node: ", node)
@@ -43,7 +45,7 @@ class Actions:
             # connections = self.mapping.get_citys_connections(node)
 
             if node == self.end:
-                return reached
+                return reached, self.frontier_count
 
             # {city_obj: {city_connection: cost}}, so given the node object, get the connection key value pairs
             for child in self.mapping.city_map[node]:
@@ -65,6 +67,7 @@ class Actions:
 
         while frontier:
             node = self.mapping.get_city_object(frontier.pop(0))
+            self.frontier_count += 1
             visited.append(node.name)
 
             print("Depth: ", depth, "Node: ", node.name, ", Frontier: ", frontier)
@@ -74,12 +77,13 @@ class Actions:
 
             # Success
             if node.name == self.end:
-                return path
+                return path, self.frontier_count
 
             if depth > count:
                 for child_name, _ in self.mapping.get_citys_connections(node.name).items():
                     if child_name not in visited:
                         frontier.append(child_name)
+                        
                     # print("Node: ", node.name, ",Frontier: ", frontier)
 
         return "cutoff"
@@ -99,9 +103,10 @@ class Actions:
 
         while frontier:
             current_cost, node = heapq.heappop(frontier)
+            self.frontier_count += 1
 
             if node == self.end:
-                return path[node]
+                return path[node], self.frontier_count
 
             explored.add(node)
 
@@ -123,9 +128,10 @@ class Actions:
 
         while frontier:
             current_cost, node = heapq.heappop(frontier)
+            self.frontier_count += 1
 
             if node == self.end:
-                return path[node]
+                return path[node], self.frontier_count
 
             explored.add(node)
 
